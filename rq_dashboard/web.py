@@ -20,7 +20,6 @@ import os
 import re
 from functools import wraps
 from math import ceil
-import json
 
 import arrow
 from flask import (
@@ -172,8 +171,8 @@ def serialize_job(job):
         ended_at=serialize_date(job.ended_at),
         exc_info=str(job.exc_info) if job.exc_info else None,
         description=job.description,
-        retry_intervals=json.loads(job.retry_intervals) if job.retry_intervals else None,
-        retries_left=json.loads(job.retries_left) if job.retries_left else None,
+        retry_intervals=job.retry_intervals if job.retry_intervals else None,
+        retries_left=job.retries_left if job.retries_left else None,
     )
 
 
@@ -184,8 +183,8 @@ def serialize_current_job(job):
         job_id=job.id,
         description=job.description,
         created_at=serialize_date(job.created_at),
-        retry_intervals=json.loads(job.retry_intervals) if job.retry_intervals else None,
-        retries_left=json.loads(job.retries_left) if job.retries_left else None,
+        retry_intervals=job.retry_intervals if job.retry_intervals else None,
+        retries_left=job.retries_left if job.retries_left else None,
         call_string=job.get_call_string(),
     )
 
@@ -528,8 +527,8 @@ def job_info(instance_number, job_id):
         result=job._result,
         exc_info=str(job.exc_info) if job.exc_info else None,
         description=job.description,
-        retry_intervals=json.loads(job.retry_intervals) if job.retry_intervals else None,
-        retries_left=json.loads(job.retries_left) if job.retries_left else None,
+        retry_intervals=job.retry_intervals if job.retry_intervals else None,
+        retries_left=job.retries_left if job.retries_left else None,
     )
 
 
