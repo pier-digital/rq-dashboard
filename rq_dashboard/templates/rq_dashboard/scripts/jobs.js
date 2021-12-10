@@ -42,6 +42,16 @@
                 if (job.ended_at !== undefined) {
                     job.ended_at = toRelative(Date.create(job.ended_at));
                 }
+                if (job.retry_intervals !== undefined) {
+                  job.retry_intervals = JSON.parse(job.retry_intervals)
+                  job.retries_max = job.retry_intervals.length
+                }
+                if (job.retries_left !== undefined) {
+                  job.retries_left = JSON.parse(job.retries_left)
+                }
+                if (job.retries_max !== undefined && job.retries_left !== undefined) {
+                  job.executions = job.retries_max - job.retries_left + 1
+                }
                 html += template({d: job}, {variable: 'd'});
             });
             $tbody[0].innerHTML = html;

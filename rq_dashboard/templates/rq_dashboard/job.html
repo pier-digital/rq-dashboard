@@ -24,6 +24,9 @@
             <% if (d.result) { %>
             <p><strong>Result</strong>:<br><%= d.result %></p>
             <% } %>
+            <% if (d.executions !== undefined) { %>
+            <p class="ellipsify"><strong>Number of executions:</strong>:<br><%= d.executions %></p>
+            <% } %>
         </span>
 
         <span class="col-6">
@@ -31,6 +34,9 @@
             <p><strong>Enqueued at</strong>:<br> <%= d.enqueued_at %></p>
             <% if (d.exc_info) { %>
             <p><strong>Ended at</strong>:<br> <%= d.ended_at %></p>
+            <% } %>
+            <% if (d.retries_max !== undefined) { %>
+            <p class="ellipsify"><strong>Max retries:</strong>:<br><%= d.retries_max %></p>
             <% } %>
         </span>
 
