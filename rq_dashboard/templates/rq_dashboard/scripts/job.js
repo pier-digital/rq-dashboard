@@ -15,8 +15,9 @@
     };
 
     var onJobLoaded = function(job, done) {
+        console.log(job);
         var html = '';
-
+        
         $job_data.empty();
 
         job.created_at = toRelative(Date.create(job.created_at)) + ' / ' + toShort(Date.create(job.created_at));
