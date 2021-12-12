@@ -15,7 +15,6 @@
     };
 
     var onJobLoaded = function(job, done) {
-        console.log(job);
         var html = '';
         
         $job_data.empty();
@@ -33,6 +32,8 @@
         }
         if (job.retries_left !== null) {
           job.retries_left = job.retries_left
+        } else {
+          job.retries_left = 0
         }
         if (job.retries_max !== undefined && job.retries_left !== null) {
           job.executions = job.retries_max - job.retries_left + 1

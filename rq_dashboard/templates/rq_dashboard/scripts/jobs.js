@@ -32,7 +32,6 @@
     };
 
     var onJobsLoaded = function(jobs, pagination, done) {
-        console.log(jobs);
         var html = '';
 
         $tbody.empty();
