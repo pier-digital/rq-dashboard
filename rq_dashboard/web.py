@@ -165,7 +165,7 @@ def serialize_date(dt):
 
 
 def serialize_job(job):
-    return dict(
+    job_dict = dict(
         id=job.id,
         created_at=serialize_date(job.created_at),
         ended_at=serialize_date(job.ended_at),
@@ -174,6 +174,15 @@ def serialize_job(job):
         retry_intervals=job.retry_intervals if job.retry_intervals else None,
         retries_left=job.retries_left if job.retries_left else None,
     )
+
+    print(job.to_dict())
+    print(job.retry_intervals)
+    print(type(job.retry_intervals))
+    print(job.retries_left)
+    print(type(job.retries_left))
+    print(job_dict)
+
+    return job_dict
 
 
 def serialize_current_job(job):

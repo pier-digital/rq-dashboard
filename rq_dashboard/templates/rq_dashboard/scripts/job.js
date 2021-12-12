@@ -27,14 +27,14 @@
         if (job.ended_at !== undefined) {
             job.ended_at = toRelative(Date.create(job.ended_at)) + ' / ' + toShort(Date.create(job.ended_at));
         }
-        if (job.retry_intervals !== undefined) {
+        if (job.retry_intervals !== null) {
           job.retry_intervals = job.retry_intervals
           job.retries_max = job.retry_intervals.length
         }
-        if (job.retries_left !== undefined) {
+        if (job.retries_left !== null) {
           job.retries_left = job.retries_left
         }
-        if (job.retries_max !== undefined && job.retries_left !== undefined) {
+        if (job.retries_max !== undefined && job.retries_left !== null) {
           job.executions = job.retries_max - job.retries_left + 1
         }
         if (job.status === "failed") {
