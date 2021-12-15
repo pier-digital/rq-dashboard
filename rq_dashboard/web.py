@@ -263,7 +263,7 @@ def replace_url_password(url):
 def obfuscated_redis_urls(redis_urls):
     obfuscated_urls = []
     for redis_url in redis_urls:
-        return obfuscated_urls.append(replace_url_password(redis_url))
+        obfuscated_urls.append(replace_url_password(redis_url))
     
     return obfuscated_urls
 
