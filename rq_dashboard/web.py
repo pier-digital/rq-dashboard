@@ -20,6 +20,7 @@ import os
 import re
 from functools import wraps
 from math import ceil
+from urllib.parse import urlparse
 
 import arrow
 from flask import (
@@ -247,6 +248,17 @@ def escape_format_instance_list(url_list):
         url_list = [re.sub(r"://:[^@]*@", "://:***@", url_list)]
     return url_list
 
+def replace_url_password(url):
+    parts = urlparse(url)
+    if parts.password is not None:
+        # split out the host portion manually. We could use
+        # parts.hostname and parts.port, but then you'd have to check
+        # if either part is None. The hostname would also be lowercased.
+        host_info = parts.netloc.rpartition('@')[-1]
+        parts = parts._replace(netloc='{}:xxx@{}'.format(
+            parts.username, host_info))
+        url = parts.geturl()
+    return url
 
 @blueprint.route("/", defaults={"instance_number": 0})
 @blueprint.route("/<int:instance_number>/")
@@ -257,7 +269,7 @@ def queues_overview(instance_number):
         render_template(
             "rq_dashboard/queues.html",
             current_instance=instance_number,
-            instance_list=current_app.config.get("RQ_DASHBOARD_REDIS_URL"),
+            instance_list=replace_url_password(current_app.config.get("RQ_DASHBOARD_REDIS_URL")),
             queues=Queue.all(),
             rq_url_prefix=url_for(".queues_overview"),
             rq_dashboard_version=rq_dashboard_version,
@@ -278,7 +290,7 @@ def workers_overview(instance_number):
         render_template(
             "rq_dashboard/workers.html",
             current_instance=instance_number,
-            instance_list=current_app.config.get("RQ_DASHBOARD_REDIS_URL"),
+            instance_list=replace_url_password(current_app.config.get("RQ_DASHBOARD_REDIS_URL")),
             workers=Worker.all(),
             rq_url_prefix=url_for(".queues_overview"),
             rq_dashboard_version=rq_dashboard_version,
@@ -314,7 +326,7 @@ def jobs_overview(instance_number, queue_name, registry_name, per_page, page):
         render_template(
             "rq_dashboard/jobs.html",
             current_instance=instance_number,
-            instance_list=current_app.config.get("RQ_DASHBOARD_REDIS_URL"),
+            instance_list=replace_url_password(current_app.config.get("RQ_DASHBOARD_REDIS_URL")),
             queues=Queue.all(),
             queue=queue,
             per_page=per_page,
@@ -340,7 +352,7 @@ def job_view(instance_number, job_id):
         render_template(
             "rq_dashboard/job.html",
             current_instance=instance_number,
-            instance_list=current_app.config.get("RQ_DASHBOARD_REDIS_URL"),
+            instance_list=replace_url_password(current_app.config.get("RQ_DASHBOARD_REDIS_URL")),
             id=job.id,
             rq_url_prefix=url_for(".queues_overview"),
             rq_dashboard_version=rq_dashboard_version,
