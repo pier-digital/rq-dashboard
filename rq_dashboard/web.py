@@ -260,16 +260,12 @@ def replace_url_password(url):
         url = parts.geturl()
     return url
 
-def obfuscated_redis_url(redis_url):
-    if isinstance(redis_url, string_types):
-        return replace_url_password(redis_url)
+def obfuscated_redis_urls(redis_urls):
+    obfuscated_urls = []
+    for redis_url in redis_urls:
+        return obfuscated_urls.append(replace_url_password(redis_url))
     
-    urls = []
-    if isinstance(redis_url, (tuple, list)):
-        for url in redis_url:
-            return urls.append(replace_url_password(url))
-    
-    return urls
+    return obfuscated_urls
 
 @blueprint.route("/", defaults={"instance_number": 0})
 @blueprint.route("/<int:instance_number>/")
