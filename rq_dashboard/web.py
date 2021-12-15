@@ -255,7 +255,7 @@ def replace_url_password(url):
         # parts.hostname and parts.port, but then you'd have to check
         # if either part is None. The hostname would also be lowercased.
         host_info = parts.netloc.rpartition('@')[-1]
-        parts = parts._replace(netloc='{}:xxx@{}'.format(
+        parts = parts._replace(netloc='{}:*@{}'.format(
             parts.username, host_info))
         url = parts.geturl()
     return url
