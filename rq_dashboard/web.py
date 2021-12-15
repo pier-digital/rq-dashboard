@@ -260,6 +260,17 @@ def replace_url_password(url):
         url = parts.geturl()
     return url
 
+def obfuscated_redis_url(redis_url):
+    if isinstance(redis_url, string_types):
+        return replace_url_password(redis_url)
+    
+    urls = []
+    if isinstance(redis_url, (tuple, list)):
+        for url in redis_url:
+            return urls.append(replace_url_password(url))
+    
+    return urls
+
 @blueprint.route("/", defaults={"instance_number": 0})
 @blueprint.route("/<int:instance_number>/")
 @blueprint.route("/<int:instance_number>/view")
@@ -269,7 +280,7 @@ def queues_overview(instance_number):
         render_template(
             "rq_dashboard/queues.html",
             current_instance=instance_number,
-            instance_list=replace_url_password(current_app.config.get("RQ_DASHBOARD_REDIS_URL")),
+            instance_list=obfuscated_redis_url(current_app.config.get("RQ_DASHBOARD_REDIS_URL")),
             queues=Queue.all(),
             rq_url_prefix=url_for(".queues_overview"),
             rq_dashboard_version=rq_dashboard_version,
@@ -290,7 +301,7 @@ def workers_overview(instance_number):
         render_template(
             "rq_dashboard/workers.html",
             current_instance=instance_number,
-            instance_list=replace_url_password(current_app.config.get("RQ_DASHBOARD_REDIS_URL")),
+            instance_list=obfuscated_redis_url(current_app.config.get("RQ_DASHBOARD_REDIS_URL")),
             workers=Worker.all(),
             rq_url_prefix=url_for(".queues_overview"),
             rq_dashboard_version=rq_dashboard_version,
@@ -326,7 +337,7 @@ def jobs_overview(instance_number, queue_name, registry_name, per_page, page):
         render_template(
             "rq_dashboard/jobs.html",
             current_instance=instance_number,
-            instance_list=replace_url_password(current_app.config.get("RQ_DASHBOARD_REDIS_URL")),
+            instance_list=obfuscated_redis_url(current_app.config.get("RQ_DASHBOARD_REDIS_URL")),
             queues=Queue.all(),
             queue=queue,
             per_page=per_page,
@@ -352,7 +363,7 @@ def job_view(instance_number, job_id):
         render_template(
             "rq_dashboard/job.html",
             current_instance=instance_number,
-            instance_list=replace_url_password(current_app.config.get("RQ_DASHBOARD_REDIS_URL")),
+            instance_list=obfuscated_redis_url(current_app.config.get("RQ_DASHBOARD_REDIS_URL")),
             id=job.id,
             rq_url_prefix=url_for(".queues_overview"),
             rq_dashboard_version=rq_dashboard_version,
